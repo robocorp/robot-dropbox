@@ -1,8 +1,7 @@
 *** Settings ***
-Library         RPA.Browser
+Library         DropboxItems
 
-*** Task ***
-Default
-	Open Available Browser  http://www.robocorp.com/
-	Sleep  5s
-	Close All browsers
+*** Tasks ***
+Store Example File to Work Item
+    Set Work Item File  image.pdf
+    Save Work Item
