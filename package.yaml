@@ -1,5 +1,5 @@
 activities:
-  entrypoint:
+  PDF:
     output: output
     activityRoot: .
     environment: 
@@ -16,5 +16,27 @@ activities:
         - output 
         - --logtitle 
         - Task log 
+        - --task
+        - Store PDF File to Work Item
+        - .
+  PNG:
+    output: output
+    activityRoot: .
+    environment: 
+      path:
+        - .
+      pythonPath:
+        - .
+    action:
+      command:
+        - python 
+        - -m 
+        - robot 
+        - -d 
+        - output 
+        - --logtitle 
+        - Task log 
+        - --task
+        - Store Image File to Work Item
         - .
 condaConfig: conda.yaml

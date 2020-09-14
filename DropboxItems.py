@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import os
 import string
 import random
 import dropbox
@@ -13,13 +14,23 @@ class DropboxItems(Items):
         self.dbx = dropbox.Dropbox(
             Secrets().get_secret("Dropbox")["ACCESS_TOKEN"])
 
-    def set_work_item_file(self, name, filename):
-        dbxid = self._upload_to_dropbox(filename)
-        self.set_work_item_variable(name, [filename, dbxid])
+    def save_file_to_work_item(self, name, filename):
+        if filename.endswith(".txt") and os.path.getsize(filename) < 10000:
+            with open(filename, "rb") as f:
+                self.set_work_item_variable(name, ["EMBED", filename, f.read()])
+        else:
+            dbxid = self._upload_to_dropbox(filename)
+            self.set_work_item_variable(name, ["DROPBOX", filename, dbxid])
 
-    def get_work_item_file(self, name):
-        filename, dbxid = self.get_work_item_variable(name)
-        self._download_from_dropbox(dbxid, filename)
+    def load_file_from_work_item(self, name):
+        backend, filename, data = self.get_work_item_variable(name)
+        if backend == "EMBED":
+            with open(filename, "wb") as f:
+                f.write(data)
+        else:
+            self._download_from_dropbox(data, filename)
+
+        return filename
 
     def _upload_to_dropbox(self, filename):
         dbxid = "/%s_%s" % (
@@ -27,11 +38,11 @@ class DropboxItems(Items):
             ''.join([random.choice(string.ascii_lowercase) for i in range(32)]))
 
         with open(filename, 'rb') as f:
-            dbx.files_upload(f.read(), dbxid)
+            self.dbx.files_upload(f.read(), dbxid)
 
         return dbxid
 
-    def _download_from_dropbox(self dbxid, filename):
+    def _download_from_dropbox(self, dbxid, filename):
         with open(filename, "wb") as f:
-            metadata, res = dbx.files_download(dbxid)
+            _, res = self.dbx.files_download(dbxid)
             f.write(res.content)
