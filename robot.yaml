@@ -1,0 +1,15 @@
+tasks:
+  Upload File To Dropbox:
+    robotTaskName: Upload File To Dropbox
+
+  Download File To Dropbox:
+    robotTaskName: Download File From Dropbox
+  
+condaConfigFile: conda.yaml
+artifactsDir: output
+PATH:
+  - .
+PYTHONPATH:
+  - .
+ignoreFiles:
+  - .gitignore
