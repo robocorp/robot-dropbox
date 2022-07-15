@@ -1,12 +1,15 @@
 *** Settings ***
-Library         DropboxItems
+Library  RPA.Robocorp.Vault
+Library  DropboxLibrary.py
 
 *** Task ***
-Store Image File to Work Item
-    Save File To Work Item  source  image.png
-    Save Work Item
+Upload File To Dropbox
+  ${dropbox_secret}=  Get Secret  Dropbox
+  Upload to Dropbox  ${dropbox_secret}[Access token]  DropboxLibrary.py  /UL1.py
 
 *** Task ***
-Store PDF File to Work Item
-    Save File To Work Item  source  image.pdf
-    Save Work Item
+Download File From Dropbox
+  ${dropbox_secret}=  Get Secret  Dropbox
+  Download from Dropbox  ${dropbox_secret}[Access token]  /UL1.py  DropboxLibrary2.py
+
+

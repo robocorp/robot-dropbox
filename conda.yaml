@@ -1,9 +1,10 @@
 channels:
-  - defaults
   - conda-forge
+
 dependencies:
   - python=3.7.5
+  - dropbox=11.33.0
+
   - pip=20.1
-  - dropbox
   - pip:
-    - rpaframework==2.*
+    - rpaframework==15.4.0
